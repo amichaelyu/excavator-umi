@@ -1,0 +1,44 @@
+# Data
+# Recorded episodes live outside version control.
+/dataset/
+*.partial
+
+# Secrets and per-machine settings (configs/hub/local.example.json shows local.json)
+.env
+.env.*
+.secrets/
+*service-account*.json
+configs/hub/local.json
+
+# Local runtime output
+hub/logs/
+artifacts/
+MUJOCO_LOG.TXT
+*.lfstmp
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.venv-*/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.cache/
+
+# JavaScript
+node_modules/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# camera calibration raw outputs (camchain, results, views); configs/camera.json holds the values
+configs/camera-calibration/
+
+# twin link meshes (keep even where a global gitignore excludes *.obj)
+!digital_twin/sim/assets/links/*.obj

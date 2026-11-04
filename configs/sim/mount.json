@@ -1,0 +1,9 @@
+{
+  "description": "Camera -> bucket transform for digital_twin/sim/replay.py: pose of the bucket reference point (tooth line centre = the twin's tooth_tip) expressed in the camera frame (OpenCV axes: +x image-right, +y image-down, +z optical axis). --cam-to-bucket on the CLI overrides this file.",
+  "measured": false,
+  "camera_side": "right",
+  "camera_faces": "backwards_toward_cab",
+  "bucket_point_in_camera_m": [0.0, 0.0, 0.0],
+  "rotation_quat_wxyz": [1.0, 0.0, 0.0, 0.0],
+  "notes": "Placeholder (identity) until measured. The camera sits on the RIGHT side of the handheld bucket and looks backwards toward the cab, along the pull direction. With the camera looking toward the cab the tooth line is to the camera's right (+x_cam), below it (+y_cam) and behind it, i.e. farther from the cab (-z_cam): bucket_point_in_camera_m = [+side_offset, +height_above_teeth, -distance_lens_behind_tooth_edge]. rotation_quat_wxyz is the bucket frame's orientation in the camera frame; leave identity unless a bucket-fixed orientation is needed (the replay uses only relative bucket pitch)."
+}

@@ -1,0 +1,46 @@
+/* Shell layout only; colors, type and controls come from theme.css. Each view scopes its
+   own CSS under [data-view="<view>"]. */
+html, body { height: 100%; }
+body { display: flex; margin: 0; }
+
+#side { width: 232px; flex: none; display: flex; flex-direction: column; background: var(--surface); border-right: 1px solid var(--line); overflow-y: auto; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 16px; color: var(--ink); text-decoration: none; font: 700 18px/1 var(--font-display); }
+#nav h3 { margin: 16px 16px 4px; font: 600 12px/1.2 var(--font-body); color: var(--muted); }
+#nav a { display: flex; align-items: center; gap: 10px; padding: 7px 16px; color: var(--ink); text-decoration: none; border-left: 3px solid transparent; }
+#nav a:hover { background: var(--surface-2); }
+#nav a.active { background: var(--surface-2); border-left-color: var(--accent); font-weight: 600; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--line-strong); }
+.dot.running { background: var(--ok); }
+.dot.starting { background: var(--warn); }
+.dot.crashed { background: var(--danger); }
+
+body > main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#home { overflow-y: auto; }
+#home .ui-header { position: sticky; top: 0; }
+#home-body { padding: 20px; max-width: 1200px; }
+#cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+.card { display: flex; flex-direction: column; gap: 10px; }
+.card .top { display: flex; align-items: center; gap: 10px; }
+.card .top b { flex: 1; font: 700 16px/1.2 var(--font-display); }
+.card p { margin: 0; color: var(--muted); font-size: 13px; flex: 1; }
+.card .row { display: flex; gap: 8px; align-items: center; }
+.card .meta { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+#app { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+#bar { min-height: 44px; padding: 4px 12px; gap: 8px; }
+#bar .ui-title { font-size: 16px; }
+#a-settings { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line); }
+#a-settings label { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 260px; font-size: 13px; color: var(--muted); }
+#a-settings textarea { font-family: var(--font-mono); font-size: 12px; resize: vertical; }
+#a-trace { flex-basis: 100%; max-height: 240px; overflow: auto; }
+#views { flex: 1; min-height: 0; position: relative; }
+#views > .view { position: absolute; inset: 0; overflow: auto; background: var(--bg); }
+#views > .view[hidden] { display: none; }
+#a-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted); }
+
+@media (max-width: 720px) {
+  body { flex-direction: column; }
+  #side { width: auto; max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
+  #home-body { padding: 12px; }
+}

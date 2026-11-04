@@ -1,0 +1,516 @@
+{
+  "joints": {
+    "slew": {
+      "positive": {
+        "pin": 19,
+        "label": "base left"
+      },
+      "negative": {
+        "pin": 21,
+        "label": "base right"
+      },
+      "sign": 1
+    },
+    "boom": {
+      "positive": {
+        "pin": 33,
+        "label": "boom up"
+      },
+      "negative": {
+        "pin": 32,
+        "label": "boom down"
+      },
+      "sign": 1
+    },
+    "stick": {
+      "positive": {
+        "pin": 23,
+        "label": "arm up"
+      },
+      "negative": {
+        "pin": 22,
+        "label": "arm down"
+      },
+      "sign": 1
+    },
+    "bucket": {
+      "positive": {
+        "pin": 25,
+        "label": "bucket up"
+      },
+      "negative": {
+        "pin": 26,
+        "label": "bucket down"
+      },
+      "sign": 1
+    }
+  },
+  "locked_joints": {
+    "slew": {
+      "value_rad": 0.0
+    },
+    "stick": {
+      "value_rad": 1.012291
+    }
+  },
+  "homing": {
+    "order": [
+      "stick",
+      "boom",
+      "bucket"
+    ],
+    "joints": {
+      "stick": {
+        "home_direction": 1,
+        "home_value_rad": 1.012291,
+        "home_duration_s": 9.247
+      },
+      "boom": {
+        "home_direction": 1,
+        "home_value_rad": 0.5235988,
+        "home_duration_s": 4.927
+      },
+      "bucket": {
+        "home_direction": -1,
+        "home_value_rad": -0.6981317,
+        "home_duration_s": 4.927
+      }
+    }
+  },
+  "defaults": {
+    "min_pulse_ms": 50,
+    "gap_ms": 150,
+    "max_pulse_ms": 60000
+  },
+  "calibration": {
+    "description": "Written by digital_twin.hardware.calibrate (boom, stick and bucket link IMUs; the inference dashboard runs it too). arm_imus: the ArmIMUEstimator calibration (axes, reference gravity, gyro bias, checks); ranges / speeds: range_measured_rad, speed_measured_rad_s and dead_time_s (press to motion) per direction (digital_twin.sim.joint_config, the runner); slew: the base turn summary (rates and onsets in the top-level slew). Pin signs live in joints.<j>.sign_verified (absent = verified).",
+    "ranges": {
+      "bucket": {
+        "range_measured_rad": 2.7364281898192226,
+        "range_model_rad": 3.1415927000000003,
+        "ratio_to_model": 0.864832660092013,
+        "direction_ok": true,
+        "top_repeat_deg": -0.2594476573894931,
+        "range_spread_deg": 0.327,
+        "source": "digital_twin.hardware.calibrate (link IMUs)"
+      },
+      "boom": {
+        "range_measured_rad": 0.7746948319745696,
+        "range_model_rad": 1.3613568,
+        "ratio_to_model": 0.6761717363639289,
+        "direction_ok": true,
+        "top_repeat_deg": -0.16862064323185563,
+        "range_spread_deg": 0.014,
+        "source": "digital_twin.hardware.calibrate (link IMUs)"
+      },
+      "stick": {
+        "range_measured_rad": 1.1840350941908402,
+        "range_model_rad": 2.199115,
+        "ratio_to_model": 0.504141589927001,
+        "direction_ok": true,
+        "top_repeat_deg": -0.039321481595089275,
+        "range_spread_deg": 0.024,
+        "source": "digital_twin.hardware.calibrate (link IMUs)"
+      }
+    },
+    "speeds": {
+      "boom": {
+        "speed_measured_rad_s": {
+          "negative": 0.6315007962844187,
+          "positive": 0.6766623231514703
+        },
+        "confidence": {
+          "negative": "medium",
+          "positive": "medium"
+        },
+        "untrusted_estimates_rad_s": {},
+        "dead_time_s": {
+          "negative": 0.022143778316287856,
+          "positive": 0.04881043996109024
+        },
+        "source": "digital_twin.hardware.calibrate (link IMUs)"
+      },
+      "stick": {
+        "speed_measured_rad_s": {
+          "negative": 0.5799248625578293,
+          "positive": 0.5696619041080481
+        },
+        "confidence": {
+          "negative": "medium",
+          "positive": "medium"
+        },
+        "untrusted_estimates_rad_s": {},
+        "dead_time_s": {
+          "negative": null,
+          "positive": null
+        },
+        "source": "digital_twin.hardware.calibrate (link IMUs)"
+      },
+      "bucket": {
+        "speed_measured_rad_s": {
+          "positive": 2.0835772121445495,
+          "negative": 2.2106412414993044
+        },
+        "confidence": {
+          "positive": "medium",
+          "negative": "medium"
+        },
+        "untrusted_estimates_rad_s": {},
+        "dead_time_s": {
+          "positive": 0.06278763435455162,
+          "negative": 0.028707273595504144
+        },
+        "source": "digital_twin.hardware.calibrate (link IMUs)"
+      }
+    },
+    "slew": {
+      "net_yaw_deg": -9.499001823219857
+    },
+    "arm_imus": {
+      "imus": {
+        "boom": {
+          "axis_imu": [
+            -0.16809126982110764,
+            0.009413372533882317,
+            0.9857264901723328
+          ],
+          "up_ref_imu": [
+            0.9984007818354209,
+            0.05444134594515303,
+            -0.015232159469377816
+          ]
+        },
+        "stick": {
+          "axis_imu": [
+            -0.10978535362660688,
+            0.010542141147627986,
+            0.9938994111021018
+          ],
+          "up_ref_imu": [
+            0.37035187469154324,
+            0.9284918426274276,
+            0.02724678121877308
+          ]
+        },
+        "bucket": {
+          "axis_imu": [
+            -0.058159444705273754,
+            0.040739382684675404,
+            0.9974757048119245
+          ],
+          "up_ref_imu": [
+            0.020296604763245078,
+            0.9991370668225579,
+            0.03623768116616035
+          ]
+        }
+      },
+      "reference_q_rad": {
+        "boom": 0.5235988,
+        "stick": 1.012291,
+        "bucket": -0.6981317
+      },
+      "reference_pose": "every joint at its home end (stick up, boom up, bucket in)",
+      "ranges_rad": {
+        "boom": 0.7746948319745696,
+        "stick": 1.1840350941908402,
+        "bucket": 2.7364281898192226
+      },
+      "stops_rad": {
+        "boom": [
+          -0.25109603197456953,
+          0.5235988
+        ],
+        "stick": [
+          -0.17174409419084014,
+          1.012291
+        ],
+        "bucket": [
+          -0.6981317,
+          2.0382964898192224
+        ]
+      },
+      "speeds_rad_s": {
+        "boom": {
+          "negative": 0.6315007962844187,
+          "positive": 0.6766623231514703
+        },
+        "stick": {
+          "negative": 0.5799248625578293,
+          "positive": 0.5696619041080481
+        },
+        "bucket": {
+          "positive": 2.0835772121445495,
+          "negative": 2.2106412414993044
+        }
+      },
+      "checks": {
+        "joints": {
+          "boom": {
+            "drives": {
+              "positive": {
+                "moved": true,
+                "results": [
+                  "no_motion",
+                  "end",
+                  "end"
+                ]
+              },
+              "negative": {
+                "moved": true,
+                "results": [
+                  "end",
+                  "end"
+                ]
+              }
+            },
+            "visits": [
+              {
+                "range_deg": 44.38,
+                "link_rotation_deg": {
+                  "boom": -44.38,
+                  "stick": -45.453,
+                  "bucket": -38.859
+                },
+                "home_repeat_deg": {
+                  "boom": -0.02,
+                  "stick": -68.173,
+                  "bucket": 85.179
+                }
+              },
+              {
+                "range_deg": 44.394,
+                "link_rotation_deg": {
+                  "boom": -44.394,
+                  "stick": -45.195,
+                  "bucket": -38.623
+                },
+                "home_repeat_deg": {
+                  "boom": -0.001,
+                  "stick": -68.18,
+                  "bucket": 85.614
+                }
+              }
+            ],
+            "range_spread_deg": 0.014
+          },
+          "stick": {
+            "drives": {
+              "positive": {
+                "moved": true,
+                "results": [
+                  "no_motion",
+                  "end",
+                  "end",
+                  "end"
+                ]
+              },
+              "negative": {
+                "moved": true,
+                "results": [
+                  "end",
+                  "end",
+                  "end"
+                ]
+              }
+            },
+            "visits": [
+              {
+                "range_deg": 67.828,
+                "link_rotation_deg": {
+                  "boom": 0.138,
+                  "stick": -67.69,
+                  "bucket": -64.804
+                },
+                "home_repeat_deg": {
+                  "boom": 0.014,
+                  "stick": -0.027,
+                  "bucket": 0.231
+                }
+              },
+              {
+                "range_deg": 67.852,
+                "link_rotation_deg": {
+                  "boom": 0.127,
+                  "stick": -67.725,
+                  "bucket": -65.112
+                },
+                "home_repeat_deg": {
+                  "boom": -0.01,
+                  "stick": -0.117,
+                  "bucket": 0.238
+                }
+              }
+            ],
+            "range_spread_deg": 0.024
+          },
+          "bucket": {
+            "drives": {
+              "negative": {
+                "moved": true,
+                "results": [
+                  "no_motion",
+                  "end",
+                  "end",
+                  "end"
+                ]
+              },
+              "positive": {
+                "moved": true,
+                "results": [
+                  "end",
+                  "end",
+                  "end"
+                ]
+              }
+            },
+            "visits": [
+              {
+                "range_deg": 156.949,
+                "link_rotation_deg": {
+                  "boom": -0.023,
+                  "stick": -0.024,
+                  "bucket": 156.925
+                },
+                "home_repeat_deg": {
+                  "boom": 0.022,
+                  "stick": 0.119,
+                  "bucket": 0.123
+                }
+              },
+              {
+                "range_deg": 156.622,
+                "link_rotation_deg": {
+                  "boom": -0.006,
+                  "stick": 0.095,
+                  "bucket": 156.718
+                },
+                "home_repeat_deg": {
+                  "boom": -0.007,
+                  "stick": -0.052,
+                  "bucket": 0.507
+                }
+              }
+            ],
+            "range_spread_deg": 0.327
+          }
+        },
+        "axis_samples": {
+          "boom": 442,
+          "stick": 1583,
+          "bucket": 695
+        },
+        "reference_spread_deg": {
+          "boom": 0.021,
+          "stick": 0.136,
+          "bucket": 0.267
+        }
+      },
+      "convention": "link pitch = pitch_ref + rotation of the at-rest gravity reading about axis_imu (right-handed, + = the joint's model + direction); boom = boom pitch, stick = stick - boom, bucket = bucket - stick",
+      "gyro_bias_dps": {
+        "boom": [
+          1.549,
+          0.687,
+          -0.353
+        ],
+        "stick": [
+          -6.373,
+          0.273,
+          -1.324
+        ],
+        "bucket": [
+          -0.006,
+          -0.394,
+          -0.12
+        ]
+      },
+      "warnings": [
+        "moving the boom turned the bucket IMU +5.6 deg differently from the boom IMU, the same on every visit (+5.52, +5.77): slack in the bucket joint under the changing load (accepted; merged offline from this artifact)"
+      ]
+    }
+  },
+  "coupling": {
+    "channels": {
+      "negative": {
+        "yaw_deg_s": null,
+        "stick_deg_s": -30.820635472333173,
+        "stick_stop": "down",
+        "yaw_onset_s": null,
+        "stick_travel_to_stop_s": 2.2952098846435547,
+        "yaw_per_stick_ratio": null,
+        "yaw_constant_for_whole_pulse": null,
+        "n_pulses": 1
+      },
+      "positive": {
+        "yaw_deg_s": null,
+        "stick_deg_s": 24.74058231986571,
+        "stick_stop": "up",
+        "yaw_onset_s": null,
+        "stick_travel_to_stop_s": 2.7812600135803223,
+        "yaw_per_stick_ratio": null,
+        "yaw_constant_for_whole_pulse": null,
+        "n_pulses": 1
+      }
+    },
+    "pure_yaw_available_when": "stick at the corresponding stop",
+    "yaw_opposite_down_vs_up": null,
+    "boom_bucket_yaw_leak": {
+      "boom": {
+        "max_abs_yaw_total_deg": 1.6375061921028378,
+        "median_yaw_per_pitch": 0.02394963010760603,
+        "n_pulses": 2
+      },
+      "bucket": {
+        "max_abs_yaw_total_deg": 11.437349741338688,
+        "median_yaw_per_pitch": 0.0620655188054675,
+        "n_pulses": 2
+      }
+    },
+    "yaw_sign_convention": "+ = counter-clockwise seen from above (right-hand rotation about up = measured gravity)",
+    "confidence": "none",
+    "source": "the retired bucket-IMU calibration (step coupling), session 20261013T083346Z (142 Hz gyro of ranges)"
+  },
+  "slew": {
+    "sign": 1,
+    "yaw_deg_s": {
+      "left": 57.486840268819876,
+      "right": -58.55028731318195
+    },
+    "mean_yaw_deg_s": {
+      "left": 78.20146821400768,
+      "right": -84.14246138838388
+    },
+    "onset_s": {
+      "left": 0.2065490484237671,
+      "right": 0.17586791515350342
+    },
+    "reference": "slew 0 = base facing forward at the start of the step"
+  },
+  "true_pose": {
+    "offset_rad": {
+      "boom": -0.314159,
+      "stick": -0.329169
+    },
+    "home_true_rad": {
+      "boom": 0.20944,
+      "stick": 0.683122
+    },
+    "measured": "2026-10-15 on the bucket Pi after Quick home (every joint at its top stop): a level on the flat part of the boom near the arm reads 50 deg above horizontal and the stick (arm) link 8 deg above horizontal, both relative to the ground. On the full4 scan that boom face is ~38 deg at boom joint 0, ~18.5 deg flatter than the pivot-to-pivot line (56.5 deg), so the boom joint is 12.00 deg at home and the stick joint 39.14 deg. Replaces the 2026-10-13 reading (47 deg, taken as the underside ~1.5 deg below the pivot line; that drew the boom ~17 deg low).",
+    "use": "display only: the inference twin panel adds offset_rad to boom / stick so the state estimate and the twin show the true pose. homing / locked_joints / calibration and every policy joint space keep the model convention (boom +30, stick +58 deg at the top stops), so the checkpoints and their labels are unchanged.",
+    "display_deg": {
+      "boom_underside_from_horizontal": {
+        "add_deg": 38.0,
+        "of": [
+          "boom"
+        ]
+      },
+      "stick_from_horizontal": {
+        "add_deg": -43.14,
+        "of": [
+          "boom",
+          "stick"
+        ]
+      }
+    }
+  }
+}

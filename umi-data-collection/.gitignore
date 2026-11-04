@@ -1,0 +1,6 @@
+access-token
+.devices/
+time-calibration.json
+pi-diagnostics.txt
+recorder/capture
+recordings/*

@@ -1,0 +1,15 @@
+# Build context for policy/processing/docker/Dockerfile is the repository root: only the lockfile, configs/camera.json (the camera model), policy/data/ (the
+# stdlib data_root that policy.processing.slam.recording imports) and policy/processing/.
+*
+!pyproject.toml
+!uv.lock
+!.python-version
+!configs/camera.json
+!policy/data/
+!policy/processing/
+policy/data/tests/
+policy/data/**/__pycache__/
+policy/processing/**/__pycache__/
+policy/processing/**/*.pyc
+policy/processing/**/.pytest_cache/
+policy/processing/**/.DS_Store

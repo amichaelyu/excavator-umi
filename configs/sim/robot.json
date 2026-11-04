@@ -1,0 +1,117 @@
+{
+  "name": "Double Eagle E568-003 / scan 2026-09-26",
+  "units": "metres, radians, seconds, kilograms",
+  "scan_scale": 1.0,
+  "scan_floor_y": 0.065,
+  "scan_origin": [
+    -0.012,
+    0.065,
+    -0.03
+  ],
+  "scan_pivots": {
+    "slew": [
+      -0.012,
+      0.108,
+      -0.03
+    ],
+    "boom": [
+      0.011,
+      0.151,
+      0.006
+    ],
+    "stick": [
+      0.167,
+      0.387,
+      0.01
+    ],
+    "bucket": [
+      0.278,
+      0.283,
+      0.011
+    ],
+    "tip": [
+      0.237,
+      0.234,
+      0.011
+    ]
+  },
+  "joints": {
+    "slew": {
+      "range_deg": [
+        -165,
+        165
+      ],
+      "speed_rad_s": 0.8,
+      "force_nm": 1.2,
+      "mass_kg": 0.55,
+      "calibration": "74\u201375.6 s video supports roughly 40\u201365 deg/s; yaw/camera ambiguity makes this an approximate prior."
+    },
+    "boom": {
+      "range_deg": [
+        -48,
+        30
+      ],
+      "speed_rad_s": 0.6,
+      "force_nm": 2.0,
+      "mass_kg": 0.12,
+      "speed_positive_rad_s": 0.52,
+      "speed_negative_rad_s": 0.68,
+      "calibration": "105\u2013118 s video: 42.5 degree fitted sweep; direction-dependent observed free-motion rates. Conditional on scan pivots and camera model."
+    },
+    "stick": {
+      "range_deg": [
+        -68,
+        58
+      ],
+      "speed_rad_s": 0.4,
+      "force_nm": 1.2,
+      "mass_kg": 0.08,
+      "calibration": "74\u201375.6 s tracked relative-link motion supports about 20\u201330 deg/s; use 23 deg/s nominal."
+    },
+    "bucket": {
+      "range_deg": [
+        -40,
+        140
+      ],
+      "speed_rad_s": 1.2,
+      "force_nm": 0.65,
+      "mass_kg": 0.05,
+      "calibration": "40\u201342 s image-plane pin-to-tooth direction changes about 136 degrees. 69 deg/s nominal is approximate; perspective, linkage ratio and exact hard stops are not identified."
+    }
+  },
+  "provenance": {
+    "pivots": "Anatomical pin centers selected in a calibrated side rendering and raycast onto the textured scan; outboard pin surfaces recentered along the transverse axis. Approximately 5-10 mm landmark uncertainty; video fitting is used to validate/refine these.",
+    "scale": "OBJ units assumed metres; envelope agrees approximately with toy specifications. No ruler or metric calibration target provided.",
+    "ranges": "Simulation limits relative to scanned rest pose, not measured mechanical hard stops. Boom observed about -33 to +10 deg. Bucket envelope expanded to accommodate video poses; total 180 deg remains a provisional prior.",
+    "dynamics": "Boom speed and approximate slew/stick/bucket rates informed by video; mass allocation, motor torque, latency, friction and backlash remain unidentified priors. Randomize for RL; validate on hardware before transfer.",
+    "actuation": "Velocity-limited electric motor surrogate, with finite torque, delayed ternary commands and holding feedback. Not a hydraulic model.",
+    "tracks": "Stationary base in 2- and 4-joint profiles. Mobile profile uses differential-drive wheel proxies; actual belt deformation and slip are uncalibrated."
+  },
+  "scan_frames": {
+    "slew": [
+      -0.012,
+      0.108,
+      -0.03
+    ],
+    "boom": [
+      -0.004,
+      0.195,
+      0.006
+    ],
+    "stick": [
+      0.17,
+      0.395,
+      0.01
+    ],
+    "bucket": [
+      0.265,
+      0.283,
+      0.011
+    ],
+    "tip": [
+      0.23,
+      0.229,
+      0.011
+    ]
+  }
+}

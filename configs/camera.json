@@ -1,0 +1,69 @@
+{
+  "description": "The bucket fisheye camera (1280x720) and its IMU: the one camera calibration every reader uses (policy.data.camera). Written by python -m policy.processing.camera_calibration; each section records its source recording and where the raw outputs are (results).",
+  "target": {
+    "target_type": "aprilgrid",
+    "tagCols": 6,
+    "tagRows": 6,
+    "tagSize": 0.0127,
+    "tagSpacing": 0.3,
+    "tags": "AprilTag 36h11, ids 0-35, two-bit black border",
+    "svg": "calibration-target/aprilgrid.svg",
+    "svg_sha256": "3bdc0713b5fe458636bd7a2dfa7a916dc6d48f94fea0d1d3d6d2618979b6d74e",
+    "grid_mm": [95.25, 95.25],
+    "measured": "2026-09-27: tape, outer black edge to outer black edge across and down the grid, of aprilgrid.svg on a MacBook Pro screen (Chrome, device pixel ratio 2, grid 509.21 CSS px): about 3.75 in = 95.25 mm; uncertainty not specified. tagSize = grid width / 7.5.",
+    "metric_scale_validated": false
+  },
+  "intrinsics": {
+    "camera_model": "pinhole",
+    "distortion_model": "equidistant",
+    "matrix": [
+      [534.9932329176305, 0, 649.5710522942213],
+      [0, 534.4924389446489, 353.0610429201782],
+      [0, 0, 1]
+    ],
+    "distortion": [-0.04191366550039201, -0.0028581383104524607, 0.003945501610500902, -0.0030342549808660014],
+    "image_size": [1280, 720],
+    "std": {
+      "fx_fy_cx_cy": [0.89039222, 0.90371712, 0.25854993, 0.28808487],
+      "distortion": [0.0022933193, 0.0067716612, 0.0084032289, 0.0034337567]
+    },
+    "reprojection_rms_px": 0.6929389446528267,
+    "corners": 6404,
+    "views": 60,
+    "coverage": 0.72,
+    "method": "OpenCV fisheye (pinhole-equidistant) fit to AprilGrid detections, 60 selected views",
+    "recording_id": "20260927T081916Z-970437b0",
+    "source_sha256": "0813e955e173c24ef30e070ecdb2dd4084487fc2aeeb5af6a01edf4950766df2",
+    "results": "configs/camera-calibration/20260927T081916Z-970437b0"
+  },
+  "camera_imu": {
+    "offset_s": 0.009315404651603488,
+    "R_cam_imu": [
+      [0.008381447341900172, -0.019961778205426786, -0.9997656119067769],
+      [0.0015739272004031447, -0.999799228039669, 0.01997564428120893],
+      [-0.9999636363856551, -0.0017409831012712533, -0.008348346196601065]
+    ],
+    "gyro_bias_dps": [1.0786721660564615, -3.419720319981926, 0.08872922526118394],
+    "sign_convention": "matching_imu_host_time = raw_camera_time + offset_s; omega_cam = R_cam_imu (omega_gyro - bias)",
+    "translation": "not estimated; assumed 0 (camera and IMU on one rigid mount)",
+    "method": "target poses (pose RMS <= 1.5 px) vs. the gyro integrated over the same ~100 ms intervals; fit on the first 60% of the moving segment, checked on the rest; gyro bias fitted with them, from the stillest 3 s window as the start",
+    "check": {
+      "status": "passed_internal_timing_check",
+      "held_out_offset_ms": 4.121779502346953,
+      "offset_disagreement_ms": 5.193625149256534,
+      "held_out_rotation_rms_dps": 4.627316542421224,
+      "rotation_speed_correlation": 0.9974134302945609,
+      "timing_sensitivity_ratio": 1.6326325383597593,
+      "training_pairs": 332,
+      "held_out_pairs": 133
+    },
+    "recording_id": "20260927T081916Z-970437b0",
+    "source_sha256": "0813e955e173c24ef30e070ecdb2dd4084487fc2aeeb5af6a01edf4950766df2",
+    "results": "configs/camera-calibration/20260927T081916Z-970437b0",
+    "limitations": [
+      "Camera-to-gyro timing and rotation only, not camera-to-IMU translation.",
+      "Host I2C read timestamps, rolling shutter and auto exposure remain sources of error.",
+      "The holdout is within one take, and the intrinsics are fitted on the same take."
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "_comment": "Registry for hub/app.py: one entry per app, in nav order. module: hub/apps/<module>.py (default: id with - as _); view: hub/web/views/<view>/ (default: id); options: keyword arguments for the module's start() (per-machine overrides are saved from the page into configs/hub/local.json); first: start before the others (services other apps use); preload: mount the view at page load.",
+  "apps": [
+    {
+      "id": "pi-dashboard",
+      "name": "UMI data collection",
+      "group": "Excavator",
+      "module": "umi",
+      "view": "umi",
+      "description": "umi-data-collection on the excavator Pi (hostname bucket): its API is relayed by the hub with the access token; the page is the same view module the Pi serves. URLs and token file: hosts.pi in configs/hub/local.json (see local.example.json).",
+      "options": {}
+    },
+    {
+      "id": "gpio",
+      "name": "GPIO bridge",
+      "group": "Excavator",
+      "first": true,
+      "description": "The ESP32 over Bluetooth LE, held by the hub: manual pin control, pin names, session recordings. Policy rollout, calibration and scripts (ws /api/gpio/ws) all go through it.",
+      "options": {
+        "target": "ble://gpio"
+      }
+    },
+    {
+      "id": "inference",
+      "name": "Inference",
+      "group": "Excavator",
+      "description": "Run the Lambda-served π0.5 policies on the real excavator: arm, calibrate, checkpoints, E-STOP.",
+      "preload": true,
+      "options": {}
+    },
+    {
+      "id": "twin-viewer",
+      "name": "Twin replay viewer",
+      "group": "Data",
+      "description": "Recordings of the policy run configs side by side with their MuJoCo twin replay (the config's reconstruct and labels stage outputs: python -m policy reconstruct|labels <config>); episode labelling (verdicts feed source.exclude).",
+      "options": {
+        "sources": [
+          {
+            "config": "dirt-orb"
+          }
+        ],
+        "labels_file": "dataset/twin-viewer/labels.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+[project]
+name = "umi-excavator"
+version = "0.1.0"
+description = "Excavator digital twin, UMI capture pipeline, hub and policy tooling."
+readme = "README.md"
+requires-python = "==3.13.*"
+# The main Mac environment (.venv): digital_twin/ (MuJoCo twin core, hardware, CLOAK runner), hub (all web UIs + GPIO
+# bridge), policy/ (ORB-SLAM3 processing, preprocessing, training, simulation RL), umi-data-collection analysis and
+# calibration.
+dependencies = [
+    # Simulation and twin
+    "mujoco==3.14.0",
+    "gymnasium==1.3.0",
+    "stable-baselines3==2.9.0",
+    "torch==2.10.0",
+    "numpy==2.3.5",
+    "scipy==1.16.3",
+    "opencv-python-headless==5.0.0.93",
+    "pillow==12.0.0",
+    "trimesh==5.1.0",
+    "matplotlib==3.11.2",
+    "pandas>=2.2,<4",
+    "imageio>=2.37,<3",
+    "imageio-ffmpeg>=0.6,<0.7",
+    # OpenPI client transport (inference runs on the Lambda server)
+    "msgpack==1.2.2",
+    "websockets==16.1.1",
+    # ESP32 BLE bridge
+    "bleak==3.0.2",
+    # Recording / dataset tooling
+    "av==16.1.0",
+    "pyyaml>=6,<7",
+    # The hub (python -m hub): one FastAPI app serving every UI and the GPIO bridge
+    "fastapi==0.162.0",
+    "uvicorn==0.54.0",
+    "httpx==0.28.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff==0.15.0"]
+# CLOAK / OpenPI π0.5 training and serving (policy/training/cloak; numpy, scipy, pillow, opencv and mujoco
+# come from the main dependencies). Linux GPU hosts add the cuda group: uv sync --group cloak --group cuda.
+cloak = [
+    "jax==0.6.2",
+    "flax==0.10.2",
+    "jaxtyping==0.2.36",
+    "beartype==0.19.0",
+    "orbax-checkpoint==0.11.13",
+    "optax==0.2.8",
+    "augmax>=0.3.4,<0.5",
+    "einops>=0.8,<0.9",
+    "numpydantic>=1.6,<2",
+    "sentencepiece>=0.2,<0.3",
+    "fsspec[gcs]>=2024.6",
+    "filelock>=3.16",
+    "tqdm-loggable>=0.2",
+    "tyro>=0.9",
+    "dm-tree>=0.1.8",
+    # The upstream config imports its RLDS module; this adapter never loads DROID.
+    # The GPU TensorFlow wheel exports NCCL symbols that conflict with JAX collectives.
+    "tensorflow-cpu==2.20.0; sys_platform == 'linux'",
+    "tensorflow==2.20.0; sys_platform != 'linux'",
+    "wandb>=0.19",
+    "psutil>=7",
+]
+cuda = ["jax[cuda12]==0.6.2; sys_platform == 'linux'"]
+# Everything policy/processing/ (ORB-SLAM3 reconstruction, recording export) needs, same pins as the main dependencies.
+# The umi-excavator-processing image (policy/processing/docker/Dockerfile) and the Ubuntu server use only this group:
+#   uv sync --only-group processing
+processing = [
+    "numpy==2.3.5",
+    "scipy==1.16.3",
+    "opencv-python-headless==5.0.0.93",
+    "pillow==12.0.0",
+    "matplotlib==3.11.2",
+]
+
+[tool.uv]
+# Not an installable package: modules run from the repository root (python -m hub, ...).
+package = false
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 120
+# dataset/ and artifacts/ are gitignored, which ruff already skips.
+extend-exclude = ["digital_twin/policy/vendor"]
+
+[tool.ruff.lint]
+# Errors and likely bugs. The code is deliberately compact (long lines, `a; b` and `if x: y` on one line,
+# small lambdas), so those style rules stay off.
+select = ["F", "E", "W", "PLE"]   # B023 was all false positives here (closures called within the same iteration)
+ignore = ["E501", "E701", "E702", "E731", "E741", "W291", "W293"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["digital_twin", "hub", "policy", "umi-data-collection"]

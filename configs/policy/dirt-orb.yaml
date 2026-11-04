@@ -1,0 +1,92 @@
+# Dirt, ORB-SLAM3+smoother labels with the bucket angle enforced only in the dirt, plain π0.5
+# (no CLOAK masking). Same recipe as the 2026-10-15 run.
+#
+#   python -m policy check dirt-orb          # the plan: what runs where, inputs / outputs per stage
+#   python -m policy all dirt-orb            # reconstruct -> labels -> cohort -> train -> eval
+#   python -m policy serve dirt-orb --register
+#
+# Commented keys show the other options with their defaults; every key: policy/configs/schema.py (KEYS, *_DEFAULTS).
+name: dirt-orb
+task: dirt                                   # dirt | bottlecap (prompt: policy.configs.schema.TASKS)
+# kind: cloak                                # cloak | ppo | residual
+
+source:
+  recordings:                                # one or more {data_root, label | ids}, merged into one cohort
+    - data_root: dataset                     # recordings at <data_root>/<id>/ (metadata.json + recording.tar)
+      label: dirt digging               # metadata label to match (case / spacing ignored); or ids: [...]
+  # Camera/IMU calibration of the reconstruction; default configs/camera.json. This recipe used the per-dataset
+  # natural-feature fit (per-recording gyro bias priors): python -m policy.processing.camera_calibration --natural
+  #   --data-root dataset --output dataset/calibration/handheld-natural --dry-run
+  calibration: dataset/calibration/handheld-natural/calibration.json
+  # Human confirmation that the source tool never appears in the camera image (frozen into the cohort).
+  visibility: Bucket1 handheld rig; the bucket and its mount are out of the camera view in every recording.
+  # holdout: 0.2                             # held-out fraction, whole recordings by id hash; 0 = all train
+  # embodiment: bucket1-handheld
+  exclude: []                                # recording ids judged bad in the twin viewer
+
+reconstruct:
+  method: orbslam3_smoother
+  workers: 8
+  runner: local                              # local | docker | lambda (umi-excavator-processing image here / on lambda.host)
+  # output: dataset/reconstructions/dirt-orb
+
+labels:
+  profile: full4_calibrated                  # twin the IK runs in (calibrated = real machine ranges) | full4
+  planner: lookahead                         # lookahead | ik | coupled
+  contact_height: 0.05                       # metres above the lowest point where the bucket angle must match
+  pitch_clip: true
+  # workers: 8
+  # runner: local                            # local | docker (umi-excavator-preprocess image)
+  # output: dataset/labels/dirt-orb
+
+cohort:
+  quality_policy: lenient                    # strict also drops ORB plausibility-gate failures
+  # max_pitch_clip_fraction: 0.5             # drop recordings with more of their pitch samples clipped
+  # max_pitch_clip_deg: 90
+  # masks: out_of_view                       # out_of_view (baseline, cloak_oov) | twin (cloak, noaug; the default for them)
+  # mask_config: configs/sim/self_mask.json   # masks: twin only
+  # mask_workers: 8
+  # runner: local                            # local | docker
+  # output: dataset/cohorts/dirt-orb
+
+train:
+  mode: baseline                             # baseline | cloak | cloak_oov | noaug
+  action_representation: delta               # delta | absolute
+  steps: 1000
+  batch: 32
+  fsdp: 1                                    # devices to shard over (lambda.gpus needs as many)
+  seed: 20261005
+  # horizon: 10
+  peak_lr: 5.0e-5
+  warmup: 25
+  save_interval: 250
+  keep_period: 250
+  # initial_checkpoint: dataset/runs/<other>/checkpoints/excavator_cloak/baseline/1000   # instead of pi05_base
+  # host_optimizer: false                    # float32 Adam on the CPU for smaller GPUs
+  # microbatch: 1                            # with host_optimizer
+  # run_dir: dataset/runs/dirt-orb
+  # wandb: true                              # W&B tracking (off by default): true = {mode: online}, or
+  # wandb: {mode: online, project: umi-excavator, entity: <team>, tags: [dirt], name: dirt-orb, group: dirt-orb}
+
+evaluate:                                    # policy.configs.schema.check_evaluate; resolved by policy.eval.stage
+  every: 250                                 # holdout evaluation at these saved steps; best one is selected
+  # mask_seed: 20261005                      # synthetic edge-mask stress test (default train.seed)
+  # runner: lambda                           # lambda | local (python -m policy eval)
+  # steps: recipe                            # recipe | all | [250, 1000]
+  # pretrained: true                         # also evaluate pi05_base
+  # stress: best                             # best | all | none
+  # split: holdout                           # holdout | train
+  # predictions: false
+  # gpus: [0]                               # default: the first of lambda.gpus
+  # backend: /opt/cloak                     # runner local only (else dataset/cloak-research/upstream)
+
+lambda:
+  # host: ubuntu@203.0.113.10                # default: hosts.lambda.host in configs/hub/local.json; or --host
+  gpus: [0]
+  # root: ~/umi-excavator                    # default: hosts.lambda.root in configs/hub/local.json
+  # poll: 60                                 # seconds between checks while `all` waits for training
+
+serve:
+  step: best                                 # best (from result.json) or a saved step
+  port: 8020
+  gpus: [0]

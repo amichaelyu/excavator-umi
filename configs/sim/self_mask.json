@@ -1,0 +1,52 @@
+{
+  "description": "Self-mask for policy inference (digital_twin.sim.self_mask): the twin is rendered from the excavator's Pi camera at the runner's joint estimate and every pixel that shows the machine is blanked before preprocessing. mount = pose of the camera, frame world_home: world axes with the machine at its homed pose (hardware_map homing). pos_m is the lens centre from the mount body origin; rpy_deg is extrinsic about world x, y, z; 0 0 0 = level, looking along world -x (toward the cab), image right = world +y. The camera stays rigid on the mount body in every other pose. (frame body, or no frame: pos_m / rpy_deg in the body frame.) The lens is configs/camera.json intrinsics (fitted on the bucket1 camera; re-check for the excavator Pi).",
+  "measured": true,
+  "mount_reference": {
+    "image": "photo of the camera on the bucket (not published)",
+    "method": "Single-photo estimate, not a measured extrinsic calibration",
+    "notes": "Lens beside the bucket's upper hinge on its right side, facing along the teeth (body -x). Estimated lens centre is near the hinge longitudinally, outside the scanned right wall (y minimum -0.0528 m), and near hinge height. Zero rotation retains the tooth-facing orientation; exact tilt cannot be recovered from this photo. Validate the overlay against live frames in two known joint poses.",
+    "estimated_pos_m": [
+      -0.005,
+      -0.07,
+      0.005
+    ],
+    "estimated_rpy_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "frame_fit": {
+      "image": "Pi camera frame at joints_deg (not published)",
+      "joints_deg": {
+        "slew": -16.7,
+        "boom": 30,
+        "stick": 52.7,
+        "bucket": -37.7
+      },
+      "method": "Rendered silhouette fit to manually traced robot outline; single frame, not a measured calibration",
+      "result": "artifacts/self-mask-fit/fit.json"
+    }
+  },
+  "profile": "full4_calibrated",
+  "mount": {
+    "body": "bucket",
+    "frame": "world_home",
+    "pos_m": [
+      0.09,
+      -0.0945,
+      -0.0295
+    ],
+    "rpy_deg": [
+      0.0,
+      -27.0,
+      0.0
+    ]
+  },
+  "work_width": 640,
+  "dilate_px": 40,
+  "fill_rgb": [
+    0,
+    0,
+    0
+  ]
+}

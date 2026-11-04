@@ -1,0 +1,211 @@
+/* Recorder card and saved-recordings list. Tokens come from theme.css.
+   Scoped (native nesting, zero specificity) to the page element: <body data-umi-page> under
+   <html data-view="umi"> on the Pi, or the hub view's page <div> (hub/web/views/umi/view.js). */
+
+:where([data-view="umi"] [data-umi-page="dashboard"]) {
+  .recorder-card {
+    margin-bottom: var(--gap);
+    padding: var(--gap);
+  }
+
+  .recorder-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .record-summary {
+    display: grid;
+    gap: 4px;
+  }
+
+  .record-state {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: var(--radius-ctl);
+    background: var(--surface-2);
+    color: var(--muted);
+    font: 600 12px/1 var(--font-body);
+  }
+
+  .record-state[data-state=idle],
+  .record-state[data-state=ready] { background: var(--ok-soft); color: var(--ok); }
+  .record-state[data-state=saving] { background: var(--info-soft); color: var(--info); }
+  .record-state[data-state=recording],
+  .record-state[data-state=error] { background: var(--danger-soft); color: var(--danger); }
+  .record-state[data-state=unknown],
+  .record-state[data-state=unavailable] { background: var(--warn-soft); color: var(--warn); }
+
+  .record-summary > strong {
+    font: 700 36px/1.1 var(--font-display);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .record-summary > span:last-child {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .record-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .record-actions label {
+    display: grid;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .record-actions label span { display: none; }
+
+  .record-actions input { width: 200px; }
+
+  .record-actions input,
+  .record-actions .button {
+    min-height: 38px;
+  }
+
+  .record-actions .button { padding: 0 16px; }
+
+  .record-hint {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .record-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .record-error,
+  .record-warning {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .record-error { background: var(--danger-soft); color: var(--danger); }
+  .record-warning { background: var(--warn-soft); color: var(--warn); }
+
+  .record-progress-wrap {
+    display: grid;
+    gap: 6px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .record-progress-wrap progress {
+    width: 100%;
+    height: 8px;
+    accent-color: var(--info);
+  }
+
+  /* ---- saved recordings -------------------------------------------------------------------------- */
+  .recordings-card { margin-top: var(--gap); }
+
+  .recordings-help {
+    margin: 0;
+    padding: 12px var(--gap) 12px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .recordings-empty {
+    margin: 0;
+    padding: 4px var(--gap) var(--gap);
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .recording-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px var(--gap);
+    border-top: 1px solid var(--line);
+  }
+
+  .recording-info {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .recording-info strong {
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .recording-info small {
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+
+  .recording-info .recording-problem {
+    color: var(--danger);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .recording-links {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .recording-links span {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 1050px) {
+    .recorder-main { align-items: flex-start; }
+    .record-actions { justify-content: flex-end; }
+    .record-actions label,
+    .record-actions input { width: 100%; }
+  }
+
+  @media (max-width: 650px) {
+    .recorder-main { display: block; }
+    .record-actions {
+      justify-content: flex-start;
+      margin-top: 14px;
+    }
+    .record-actions .button {
+      flex: 1;
+      padding: 0 10px;
+    }
+    .record-bottom { flex-wrap: wrap; }
+    .recording-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .recording-links { width: 100%; }
+  }
+}

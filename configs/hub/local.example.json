@@ -1,0 +1,18 @@
+{
+  "_comment": "Copy to configs/hub/local.json (gitignored) and fill in your machines; read by policy/data/local_config.py. The hub also saves page settings here under \"apps\".",
+  "hosts": {
+    "pi": {
+      "urls": [
+        "http://169.254.10.2:8000",
+        "http://raspberrypi.local:8000",
+        "http://192.0.2.20:8000"
+      ],
+      "token_file": "umi-data-collection/.devices/bucket/access-token"
+    },
+    "lambda": {
+      "host": "ubuntu@203.0.113.10",
+      "root": "~/umi-excavator"
+    }
+  },
+  "apps": {}
+}

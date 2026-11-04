@@ -1,0 +1,171 @@
+/* GPIO bridge view stylesheet, scoped to the view root.
+   Palette, fonts, buttons, inputs and tables come from the hub theme; this only lays out the page and
+   styles the pin cards. Pin states: pressed (.card.low) -> --ok family, released -> neutral. */
+[data-view="gpio"] {
+  /* ---- header ---------------------------------------------------------------------------------- */
+  .ui-header .chip i { background: var(--danger); }
+  .ui-header .chip.on { color: var(--ok); background: var(--ok-soft); }
+  .ui-header .chip.on i { background: var(--ok); }
+  .ui-header .chip:not(.on) { color: var(--danger); background: var(--danger-soft); }
+  .chip i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+  & { background: var(--bg); }
+  main { max-width: 1040px; margin: 0 auto; padding: 20px; }
+
+  /* ---- pulse toolbar --------------------------------------------------------------------------- */
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: var(--gap); }
+  .field { display: flex; align-items: center; gap: 10px; }
+  .field label { font-size: 13px; color: var(--muted); }
+  .ms-input {
+    display: flex; align-items: center; min-height: var(--ctl-h); padding-right: 8px;
+    border: 1px solid var(--line-strong); border-radius: var(--radius-ctl); background: var(--surface);
+  }
+  .ms-input input {
+    width: 72px; border: 0; background: transparent; outline: none;
+    font-family: var(--font-display); font-size: 15px; font-variant-numeric: tabular-nums;
+  }
+  .ms-input span { color: var(--muted); font-size: 13px; }
+  .ms-input:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .presets { display: flex; border: 1px solid var(--line-strong); border-radius: var(--radius-ctl); overflow: hidden; }
+  .presets button {
+    border: 0; border-left: 1px solid var(--line); border-radius: 0; padding: 0 11px;
+    font-family: var(--font-display); font-size: 14px; font-variant-numeric: tabular-nums;
+  }
+  .presets button:first-child { border-left: 0; }
+  .presets button[aria-pressed="true"] { background: var(--info-soft); color: var(--info); font-weight: 700; }
+  .presets button:focus-visible { outline-offset: -2px; }
+
+  .spacer { flex: 1; }
+
+  /* Shared .btn comes from theme.css; these keep pointer-held buttons from selecting text. */
+  .btn { user-select: none; -webkit-user-select: none; touch-action: none; }
+
+  /* ---- pin groups ------------------------------------------------------------------------------ */
+  .grid {
+    display: grid; gap: var(--gap); align-items: start;
+    grid-template-columns: repeat(auto-fill, minmax(min(440px, 100%), 1fr));
+  }
+
+  /* One panel per function (Drive, Big arm, Gripper, ...) */
+  .group { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+  .group header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 2px 2px 12px; }
+  .group h3 { font-size: 15px; }
+  .group .count { color: var(--muted); font-size: 12px; }
+  .group-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 10px; }
+  .group.unassigned { grid-column: 1 / -1; border-style: dashed; background: transparent; }
+  .group.unassigned .group-cards { grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr)); }
+
+  .empty { color: var(--muted); grid-column: 1 / -1; margin: 24px 0; }
+
+  /* ---- pin card -------------------------------------------------------------------------------- */
+  .card {
+    position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px; padding: 14px;
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius);
+    transition: border-color .12s, background .12s;
+  }
+  /* .low = pin driven (button pressed) */
+  .card.low { border-color: var(--ok); background: var(--ok-soft); }
+
+  .card-head { display: flex; align-items: center; gap: 10px; }
+  .card-head .titles { min-width: 0; flex: 1; }
+  .arrow {
+    flex: none; min-width: 34px; height: 34px; padding: 0 6px; display: grid; place-items: center;
+    border-radius: var(--radius-ctl); background: var(--surface-2); color: var(--ink);
+    font-size: 18px; font-weight: 700; letter-spacing: -.12em;
+  }
+  .arrow:empty { display: none; }
+  .card.low .arrow { background: var(--ok); color: var(--surface); }
+  .key:empty { display: none; }
+  .card.unnamed .pin-name { color: var(--muted); font-size: 17px; }
+  .pin-name {
+    display: block; min-height: 0; padding: 0; border: 0; border-bottom: 1px dashed transparent; border-radius: 0;
+    background: none; text-align: left; cursor: text;
+    font: 700 20px/1.15 var(--font-display);
+  }
+  .pin-name:hover:not(:disabled) { background: none; border-color: transparent; border-bottom-color: var(--muted); }
+  .pin-name:active:not(:disabled) { transform: none; }
+  .name-input { width: 100%; min-width: 0; min-height: 0; padding: 2px 6px; font: inherit; }
+  .card-head .titles .pin-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pin-meta { color: var(--muted); font-size: 12px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .key {
+    font: 11px var(--font-mono); color: var(--muted);
+    border: 1px solid var(--line-strong); border-radius: var(--radius-ctl); padding: 1px 6px;
+  }
+
+  .level { display: flex; align-items: center; gap: 10px; font: 600 13px/1.2 var(--font-display); font-variant-numeric: tabular-nums; }
+  .level .bar { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+  .level .bar b { display: block; height: 100%; width: 100%; background: var(--line-strong); }
+  .level .txt { color: var(--muted); min-width: 76px; }
+  .card.low .level .bar { background: var(--surface); }
+  .card.low .level .bar b { background: var(--ok); }
+  .card.low .level .txt { color: var(--ok); }
+
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .actions .btn { min-height: 36px; padding: 0 8px; }
+  .hold.active,
+  .hold.active:hover:not(:disabled) { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+
+  /* ---- activity log ---------------------------------------------------------------------------- */
+  .log-wrap, .recordings { margin-top: 24px; }
+  .log-head { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+  .hint { color: var(--muted); font-size: 12px; }
+  kbd {
+    font: 11px var(--font-mono); border: 1px solid var(--line-strong); border-bottom-width: 2px;
+    border-radius: var(--radius-ctl); padding: 0 4px; background: var(--surface);
+  }
+  .log {
+    list-style: none; margin: 0; height: 180px;
+    background: var(--stage); color: #d7dbd6; border-radius: var(--radius); padding: 10px 12px;
+    font: 12px/1.6 var(--font-mono); overflow: auto;
+  }
+  .log .err { color: #f08a7e; }
+  .log time { opacity: .6; margin-right: 8px; }
+
+  /* ---- recording ------------------------------------------------------------------------------- */
+  .rec-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px; margin-bottom: var(--gap);
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .rec-bar.active { border-color: var(--danger); background: var(--danger-soft); }
+  .rec-btn { gap: 8px; font-weight: 600; }
+  .rec-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--danger); }
+  .rec-bar.active .rec-btn { background: var(--danger); border-color: var(--danger); color: var(--danger-ink); }
+  .rec-bar.active .rec-dot { background: var(--danger-ink); border-radius: 2px; }
+  .rec-bar input { flex: 1; min-width: 160px; }
+  .rec-bar input:disabled { opacity: .6; }
+  .rec-status { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .rec-bar.active .rec-status { color: var(--danger); font-weight: 600; }
+  .rec-bar.active .rec-status::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px;
+    border-radius: 50%; background: var(--danger); animation: gpio-blink 1s steps(1) infinite;
+  }
+
+  /* ---- recordings table ------------------------------------------------------------------------ */
+  .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  th, td { padding: 8px 12px; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+  td .sub { color: var(--muted); font: 11px var(--font-mono); margin-left: 6px; }
+  td a { text-decoration: none; margin-right: 10px; }
+  td a:hover { text-decoration: underline; }
+  .muted { color: var(--muted); }
+  .tag {
+    display: inline-flex; align-items: center; height: 18px; padding: 0 6px; margin-left: 6px;
+    border-radius: var(--radius-ctl); background: var(--warn-soft); color: var(--warn); font-size: 11px; font-weight: 600;
+  }
+
+  @media (max-width: 560px) {
+    .ui-header { padding-left: 16px; padding-right: 16px; }
+    main { padding: 16px; }
+    .spacer { display: none; }
+    .toolbar .btn { flex: 1; }
+    .toolbar .field { flex: 1 1 auto; }
+    .presets { flex: 1 1 100%; }
+    .presets button { flex: 1; padding: 0 4px; }
+    .rec-bar input { flex: 1 1 100%; order: 3; }
+    .rec-bar .rec-status { flex: 1; text-align: right; }
+  }
+}
+
+@keyframes gpio-blink { 50% { opacity: 0; } }

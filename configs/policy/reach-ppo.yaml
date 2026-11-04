@@ -1,0 +1,13 @@
+# PPO bucket-tip reaching in the MuJoCo twin (arm2: boom + bucket, delayed ternary motor commands),
+# compared against seeded random and zero policies on unseen randomized episodes. Local CPU.
+#
+#   python -m policy train reach-ppo      # [--resume]; ends with the evaluation (dataset/runs/reach-ppo/evaluation.json)
+#   python -m policy eval reach-ppo       # its summary
+name: reach-ppo
+kind: ppo
+
+train:
+  profile: arm2
+  steps: 250000
+  episodes: 50                               # unseen evaluation seeds
+  # run_dir: dataset/runs/reach-ppo
