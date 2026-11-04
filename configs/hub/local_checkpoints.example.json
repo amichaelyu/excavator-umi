@@ -1,0 +1,13 @@
+{
+  "checkpoints": [
+    {
+      "id": "cloak-dirt-good-cloak-1000",
+      "task": "dirt",
+      "mode": "cloak",
+      "prompt": "scoop the dirt",
+      "step": 1000,
+      "gateway_url": "ws://127.0.0.1:8040",
+      "gateway_env": "UMI_EXCAVATOR_CLOAK_DIRT_GOOD_CLOAK_URL"
+    }
+  ]
+}

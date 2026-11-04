@@ -1,0 +1,8 @@
+# Build context is the repository root; send only what the dashboard image uses.
+# (BuildKit reads <Dockerfile>.dockerignore, so this does not affect other images built from the root.)
+*
+!hardware/umi-data-collection/recorder/*.py
+!hardware/umi-data-collection/recorder/capture.c
+!hub/web/data-collection/
+hub/web/data-collection/theme.css
+!hub/web/theme.css

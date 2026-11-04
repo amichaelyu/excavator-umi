@@ -1,0 +1,17 @@
+{
+  "hosts": {
+    "pi": {
+      "urls": [
+        "http://169.254.10.2:8000",
+        "http://raspberrypi.local:8000",
+        "http://192.0.2.20:8000"
+      ],
+      "token_file": "hardware/umi-data-collection/.devices/bucket/access-token"
+    },
+    "lambda": {
+      "host": "ubuntu@203.0.113.10",
+      "root": "~/umi-excavator"
+    }
+  },
+  "apps": {}
+}

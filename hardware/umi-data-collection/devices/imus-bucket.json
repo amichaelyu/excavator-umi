@@ -1,0 +1,5 @@
+[
+  {"name": "bucket", "bus": 1, "address": "0x6a"},
+  {"name": "stick", "bus": 3, "address": "0x68", "model": "mpu6050"},
+  {"name": "boom", "bus": 5, "address": "0x68", "model": "mpu6050"}
+]

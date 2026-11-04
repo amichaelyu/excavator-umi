@@ -1,0 +1,46 @@
+{
+  "measured": true,
+  "mount_reference": {
+    "estimated_pos_m": [
+      -0.005,
+      -0.07,
+      0.005
+    ],
+    "estimated_rpy_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "frame_fit": {
+      "joints_deg": {
+        "slew": -16.7,
+        "boom": 30,
+        "stick": 52.7,
+        "bucket": -37.7
+      },
+      "result": "artifacts/self-mask-fit/fit.json"
+    }
+  },
+  "profile": "full4_calibrated",
+  "mount": {
+    "body": "bucket",
+    "frame": "world_home",
+    "pos_m": [
+      0.09,
+      -0.0945,
+      -0.0295
+    ],
+    "rpy_deg": [
+      0.0,
+      -27.0,
+      0.0
+    ]
+  },
+  "work_width": 640,
+  "dilate_px": 40,
+  "fill_rgb": [
+    0,
+    0,
+    0
+  ]
+}

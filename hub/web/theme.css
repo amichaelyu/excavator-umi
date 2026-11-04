@@ -1,0 +1,162 @@
+/* Shared look for every web UI in this repo: the hub shell and every app view in it (UMI data
+   collection, GPIO bridge, policy rollout, data review). The shell links this first; each view's own
+   stylesheet should only lay out its view and use these tokens: no app-specific palettes or fonts.
+
+   The hub serves it at /web/theme.css. The Pi page (hub/web/data-collection/) links it as theme.css (its
+   deploy tars with -h).
+   Base element styles use :where() so they have zero specificity and any app rule wins.
+
+   Roles:
+     --accent (machine yellow)  only as a fill behind --accent-ink: primary actions, the brand mark
+     --danger (signal red)      stop, destructive actions, errors
+     --ok / --warn              status only
+     --info                     links, selection, focus, neutral highlights (estimates, cursors) */
+
+:root {
+  color-scheme: light dark;
+  --bg: #e6e8e3;            /* concrete */
+  --surface: #fbfbf8;       /* panels */
+  --surface-2: #f1f2ee;     /* insets, table stripes, hovered rows */
+  --ink: #1e2421;           /* graphite */
+  --muted: #66706a;
+  --line: #d3d7d0;
+  --line-strong: #b5bbb3;
+  --accent: #f2b705;
+  --accent-hover: #e0a800;
+  --accent-ink: #1e2421;
+  --danger: #c42b1c;
+  --danger-hover: #a92315;
+  --danger-ink: #ffffff;
+  --danger-soft: #f8e1dd;
+  --ok: #2e8b57;
+  --ok-soft: #dcefe3;
+  --warn: #a86f00;
+  --warn-soft: #f7ebcc;
+  --info: #2f5d8a;
+  --info-soft: #dde7f1;
+  --stage: #0e100f;         /* behind camera frames, renders, video */
+  --focus: #2f5d8a;
+
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "DIN Alternate", "DIN 2014", "D-DIN", Bahnschrift, "Barlow Semi Condensed", var(--font-body);
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --radius: 8px;            /* panels, frames */
+  --radius-ctl: 4px;        /* buttons, inputs, tags */
+  --gap: 16px;
+  --ctl-h: 32px;
+  --shadow: 0 1px 0 rgb(30 36 33 / .04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151816; --surface: #1d211f; --surface-2: #252a27; --ink: #e6e8e3; --muted: #9aa39d;
+    --line: #313733; --line-strong: #48504b; --accent-hover: #ffc824;
+    --danger: #e5483a; --danger-hover: #f05e51; --danger-soft: #3a1d1a;
+    --ok: #4cb27a; --ok-soft: #173024; --warn: #e0a526; --warn-soft: #362a12;
+    --info: #7fa7cf; --info-soft: #1d2a37; --focus: #7fa7cf; --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151816; --surface: #1d211f; --surface-2: #252a27; --ink: #e6e8e3; --muted: #9aa39d;
+  --line: #313733; --line-strong: #48504b; --accent-hover: #ffc824;
+  --danger: #e5483a; --danger-hover: #f05e51; --danger-soft: #3a1d1a;
+  --ok: #4cb27a; --ok-soft: #173024; --warn: #e0a526; --warn-soft: #362a12;
+  --info: #7fa7cf; --info-soft: #1d2a37; --focus: #7fa7cf; --shadow: none;
+}
+
+/* ---- base elements ---------------------------------------------------------------------------- */
+:where(*, *::before, *::after) { box-sizing: border-box; }
+:where(html) { -webkit-text-size-adjust: 100%; }
+:where(body) {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.45 var(--font-body); -webkit-font-smoothing: antialiased;
+}
+:where(h1, h2, h3, h4) { font-family: var(--font-display); font-weight: 700; line-height: 1.15; margin: 0; letter-spacing: 0; }
+:where(h1) { font-size: 22px; }
+:where(h2) { font-size: 17px; }
+:where(h3) { font-size: 15px; }
+:where(h4) { font-size: 13px; color: var(--muted); }
+:where(p) { margin: 0 0 8px; }
+:where(a) { color: var(--info); text-underline-offset: 2px; }
+:where(code, kbd, samp, pre) { font-family: var(--font-mono); font-size: 12px; }
+:where(code) { background: var(--surface-2); border-radius: 3px; padding: 1px 4px; }
+:where(pre) { margin: 0; white-space: pre-wrap; }
+:where(hr) { border: 0; border-top: 1px solid var(--line); margin: var(--gap) 0; }
+:where(img, video, canvas, svg) { max-width: 100%; }
+:where(table) { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+:where(th) { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; }
+:where(th, td) { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+:where(label) { color: var(--ink); }
+:where(fieldset) { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin: 0; }
+:where(legend) { padding: 0 4px; color: var(--muted); font-size: 12px; }
+:where([hidden]) { display: none !important; }
+::selection { background: var(--info-soft); }
+
+/* controls */
+:where(button, .btn) {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: var(--ctl-h); padding: 0 12px; border-radius: var(--radius-ctl);
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+  font: 500 13px/1 var(--font-body); cursor: pointer; text-decoration: none; white-space: nowrap;
+}
+:where(button, .btn):hover:not(:disabled) { background: var(--surface-2); border-color: var(--muted); }
+:where(button, .btn):active:not(:disabled) { transform: translateY(1px); }
+:where(button, .btn):disabled { opacity: .45; cursor: not-allowed; }
+:where(button[aria-pressed="true"]) { background: var(--surface-2); border-color: var(--ink); }
+:where(input:not([type=checkbox], [type=radio], [type=range], [type=color]), select, textarea) {
+  min-height: var(--ctl-h); padding: 5px 8px; border-radius: var(--radius-ctl);
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+  font: 13px/1.3 var(--font-body);
+}
+:where(textarea) { min-height: 64px; resize: vertical; }
+:where(input[type=checkbox], input[type=radio], input[type=range]) { accent-color: var(--ink); }
+:where(input, select, textarea)::placeholder { color: var(--muted); }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---- shared components (opt in with the class) ------------------------------------------------- */
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: var(--danger-ink); font-weight: 600; }
+.btn-danger:hover:not(:disabled) { background: var(--danger-hover); border-color: var(--danger-hover); }
+
+/* Page header: <header class="ui-header"><span class="ui-mark"></span><h1 class="ui-title">Name <span class="ui-sub">context</span></h1> … <div class="ui-header-end">status</div></header> */
+.ui-header {
+  display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; min-height: 52px; padding: 8px 20px;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.ui-mark {
+  flex: none; width: 20px; height: 20px; border-radius: 3px;
+  background: linear-gradient(135deg, var(--accent) 0 58%, var(--accent-ink) 58% 70%, var(--accent) 70%);
+}
+.ui-title { font: 700 18px/1.1 var(--font-display); margin: 0; display: flex; align-items: baseline; gap: 10px; }
+.ui-sub { font: 400 13px/1.2 var(--font-body); color: var(--muted); }
+.ui-header-end { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+.ui-panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--gap); box-shadow: var(--shadow); }
+.ui-panel > :where(h2, h3):first-child { margin-bottom: 12px; }
+.ui-stage { background: var(--stage); border-radius: var(--radius); overflow: hidden; }
+
+.ui-tag {
+  display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: var(--radius-ctl);
+  background: var(--surface-2); color: var(--muted); font: 600 12px/1 var(--font-body); white-space: nowrap;
+}
+.ui-tag.ok { background: var(--ok-soft); color: var(--ok); }
+.ui-tag.warn { background: var(--warn-soft); color: var(--warn); }
+.ui-tag.danger { background: var(--danger-soft); color: var(--danger); }
+.ui-tag.info { background: var(--info-soft); color: var(--info); }
+
+.ui-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--line-strong); }
+.ui-dot.ok { background: var(--ok); } .ui-dot.warn { background: var(--warn); }
+.ui-dot.danger { background: var(--danger); } .ui-dot.info { background: var(--info); }
+
+.ui-muted { color: var(--muted); }
+.ui-num { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+.ui-log {
+  background: var(--stage); color: #d7dbd6; border-radius: var(--radius); padding: 10px 12px;
+  font: 12px/1.4 var(--font-mono); overflow: auto; white-space: pre-wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

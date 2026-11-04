@@ -1,0 +1,67 @@
+# The deployable images of this repository. Every build context is the repository root; each Dockerfile has a
+# Dockerfile.dockerignore next to it that keeps the context small. The images hold runtimes, and services that
+# work on the repository mount it at /workspace, so code changes need no rebuild.
+#
+#   docker compose build processing                              # SLAM/VIO image (ORB-SLAM3, policy/processing/)
+#   docker compose run --rm processing python -m policy.processing.reconstruct_orbslam --manifest /data/... ...
+#   docker compose run --rm preprocessing python -m policy labels configs/policy/<name>.yaml --runner local
+#   CLOAK_REV=<rev> docker compose build train                   # rev: policy.training.cloak.UPSTREAM_REVISION
+#   docker compose run --rm train python -m policy.training.cloak.experiment --recipe ...
+#
+# Set DOCKER_USER="$(id -u):$(id -g)" so files written into mounted directories belong to you. The excavator Pi
+# dashboard has its own compose file: hardware/umi-data-collection/deploy/compose.yaml. Lambda boxes build the train
+# and processing images themselves (python -m policy image|train|eval|reconstruct <config>).
+name: umi-excavator
+
+services:
+  # Run-to-completion tool: ORB-SLAM3 reconstruction with the native ORB-SLAM3 runners. $UMI_DATA_DIR (default
+  # ./dataset, as policy.data.data_root) is /data and the working directory; use /data paths in arguments.
+  processing:
+    image: umi-excavator-processing
+    build:
+      context: .
+      dockerfile: policy/processing/docker/Dockerfile
+      args:
+        BUILD_JOBS: "${BUILD_JOBS:-8}"
+    profiles: [tools]                # started only by `docker compose run processing ...`
+    init: true
+    network_mode: none
+    ipc: host                        # worker processes share memory
+    user: "${DOCKER_USER:-1000:1000}"
+    volumes:
+      - "${UMI_DATA_DIR:-./dataset}:/data"
+
+  # π0.5 / CLOAK training and serving runtime (policy/training/docker/train.Dockerfile) on a local Linux GPU host.
+  train:
+    image: umi-excavator-train
+    build:
+      context: .
+      dockerfile: policy/training/docker/train.Dockerfile
+      args:
+        CLOAK_REV: "${CLOAK_REV:-}"                   # required by the Dockerfile; see the header
+    profiles: [gpu]
+    ipc: host
+    user: "${DOCKER_USER:-1000:1000}"
+    volumes:
+      - .:/workspace
+      - "${HOME}/.cache/openpi:/cache/openpi"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Run-to-completion tool: recordings -> labels -> cohorts (twin IK replays on CPU). Same image that
+  # `python -m policy labels|cohort <config>` builds with <stage>.runner: docker; the repository is /workspace.
+  preprocessing:
+    image: umi-excavator-preprocess:latest
+    build:
+      context: .
+      dockerfile: policy/docker/preprocess.Dockerfile
+    profiles: [tools]
+    init: true
+    user: "${DOCKER_USER:-1000:1000}"
+    volumes:
+      - .:/workspace
