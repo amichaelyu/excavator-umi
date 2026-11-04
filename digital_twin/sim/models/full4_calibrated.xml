@@ -1,0 +1,73 @@
+<mujoco model="E568_full4_calibrated">
+  <compiler angle="radian" meshdir="../assets/links" texturedir="../assets/links" autolimits="true" />
+  <option timestep=".005" gravity="0 0 -9.81" integrator="implicitfast" cone="elliptic" />
+  <visual>
+    <global offwidth="960" offheight="720" />
+    <quality shadowsize="2048" />
+  </visual>
+  <default>
+    <joint damping=".04" armature=".004" frictionloss=".015" />
+    <geom friction=".8 .01 .001" condim="3" solref=".01 1" />
+  </default>
+  <asset>
+    <texture name="scan_texture" type="2d" file="albedo.png" />
+    <material name="scan_material" texture="scan_texture" specular=".1" shininess=".1" />
+    <mesh name="base" file="base.obj" inertia="shell" />
+    <mesh name="slew" file="slew.obj" inertia="shell" />
+    <mesh name="boom" file="boom.obj" inertia="shell" />
+    <mesh name="stick" file="stick.obj" inertia="shell" />
+    <mesh name="bucket" file="bucket.obj" inertia="shell" />
+  </asset>
+  <worldbody>
+    <light pos="0 -1 2" dir="0 0 -1" diffuse=".9 .9 .9" />
+    <light pos="1 1 1.5" dir="-1 -1 -1" diffuse=".5 .5 .5" />
+    <geom name="ground" type="plane" size="2 2 .1" rgba=".24 .27 .30 1" />
+    <camera name="side" pos=".20 -1 .30" xyaxes="1 0 0 0 0 1" fovy="42" />
+    <body name="target" mocap="true" pos=".30 -.04 .18">
+      <geom type="sphere" size=".012" rgba=".1 1 .4 .6" contype="0" conaffinity="0" />
+    </body>
+    <body name="base" pos="0 0 .001">
+      <geom type="mesh" mesh="base" material="scan_material" contype="0" conaffinity="0" group="1" mass="0" />
+      <geom type="box" pos="-.02 -0.065 .025" size=".115 .018 .025" rgba=".08 .08 .08 0" group="3" />
+      <geom type="box" pos="-.02 0.065 .025" size=".115 .018 .025" rgba=".08 .08 .08 0" group="3" />
+      <body name="slew" pos="0 -0 0.043">
+        <joint name="slew" type="hinge" axis="0 0 1" pos="0 0 0" limited="false" />
+        <geom type="mesh" mesh="slew" material="scan_material" contype="0" conaffinity="0" group="1" mass="0" />
+        <geom name="cab_collision" type="box" pos="-.04 .025 .045" size=".08 .055 .045" mass="0.55" rgba=".1 .1 .1 0" group="3" />
+        <body name="boom" pos="0.008 -0.036 0.087">
+          <joint name="boom" type="hinge" axis="0 -1 0" pos="0.015 0 -0.044" range="-0.251096 0.5235988" />
+          <geom type="mesh" mesh="boom" material="scan_material" contype="0" conaffinity="0" group="1" mass="0" />
+          <geom name="boom_collision" type="capsule" fromto="0.015 0 -0.044 0.171 -0.004 0.192" size=".012" mass="0.12" rgba=".4 .4 .4 0" group="3" />
+          <body name="stick" pos="0.174 -0.004 0.2">
+            <joint name="stick" type="hinge" axis="0 -1 0" pos="-0.003 0 -0.008" range="-0.1717441 1.012291" />
+            <geom type="mesh" mesh="stick" material="scan_material" contype="0" conaffinity="0" group="1" mass="0" />
+            <geom name="stick_collision" type="capsule" fromto="-0.003 0 -0.008 0.108 -0.001 -0.112" size=".012" mass="0.08" rgba=".4 .4 .4 0" group="3" />
+            <body name="bucket" pos="0.095 -0.001 -0.112">
+              <joint name="bucket" type="hinge" axis="0 -1 0" pos="0.013 0 0" range="-0.6981317 2.038296" />
+              <geom type="mesh" mesh="bucket" material="scan_material" contype="0" conaffinity="0" group="1" mass="0" />
+              <geom type="box" pos="-0.0126 -0.03 -0.02205" size=".025 .002 .027" mass=".01" rgba=".4 .4 .4 0" group="3" />
+              <geom type="box" pos="-0.0126 0.03 -0.02205" size=".025 .002 .027" mass=".01" rgba=".4 .4 .4 0" group="3" />
+              <geom type="box" pos="-0.0224 0 -0.0392" size=".024 .030 .003" mass=".015" rgba=".4 .4 .4 0" group="3" />
+              <geom type="box" pos="0.012 0 -0.023" size=".003 .030 .025" mass=".015" rgba=".4 .4 .4 0" group="3" />
+              <site name="tooth_tip" pos="-0.028 0 -0.049" size=".003" rgba="1 .2 .1 1" />
+              <camera name="bucket_camera" pos="0 0 .025" xyaxes="0 -1 0 .7 0 .7" fovy="75" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="slew" joint="slew" kp="35" kv="1.2" ctrllimited="false" forcerange="-1.2 1.2" />
+    <position name="boom" joint="boom" kp="35" kv="1.2" ctrlrange="-0.251096 0.5235988" forcerange="-2 2" />
+    <position name="stick" joint="stick" kp="35" kv="1.2" ctrlrange="-0.1717441 1.012291" forcerange="-1.2 1.2" />
+    <position name="bucket" joint="bucket" kp="35" kv="1.2" ctrlrange="-0.6981317 2.038296" forcerange="-0.65 0.65" />
+  </actuator>
+  <contact>
+    <exclude body1="base" body2="slew" />
+    <exclude body1="slew" body2="boom" />
+    <exclude body1="boom" body2="stick" />
+    <exclude body1="stick" body2="bucket" />
+    <exclude body1="slew" body2="stick" />
+  </contact>
+</mujoco>

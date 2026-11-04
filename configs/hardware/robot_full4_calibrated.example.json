@@ -1,0 +1,108 @@
+{
+  "name": "Double Eagle E568-003 / scan 2026-09-26",
+  "units": "metres, radians, seconds, kilograms",
+  "scan_scale": 1.0,
+  "scan_floor_y": 0.065,
+  "scan_origin": [
+    -0.012,
+    0.065,
+    -0.03
+  ],
+  "scan_pivots": {
+    "slew": [
+      -0.012,
+      0.108,
+      -0.03
+    ],
+    "boom": [
+      0.011,
+      0.151,
+      0.006
+    ],
+    "stick": [
+      0.167,
+      0.387,
+      0.01
+    ],
+    "bucket": [
+      0.278,
+      0.283,
+      0.011
+    ],
+    "tip": [
+      0.237,
+      0.234,
+      0.011
+    ]
+  },
+  "joints": {
+    "slew": {
+      "range_deg": null,
+      "speed_rad_s": 1.003334639258969,
+      "force_nm": 1.2,
+      "mass_kg": 0.55,
+      "speed_positive_rad_s": 1.003334639258969,
+      "speed_negative_rad_s": 1.0218952916036894
+    },
+    "boom": {
+      "range_deg": [
+        -14.386743,
+        30.000001
+      ],
+      "speed_rad_s": 0.6315007962844187,
+      "force_nm": 2.0,
+      "mass_kg": 0.12,
+      "speed_positive_rad_s": 0.6766623231514703,
+      "speed_negative_rad_s": 0.6315007962844187
+    },
+    "stick": {
+      "range_deg": [
+        -9.840212,
+        58.000002
+      ],
+      "speed_rad_s": 0.5696619041080481,
+      "force_nm": 1.2,
+      "mass_kg": 0.08,
+      "speed_positive_rad_s": 0.5696619041080481,
+      "speed_negative_rad_s": 0.5799248625578293
+    },
+    "bucket": {
+      "range_deg": [
+        -40.0,
+        116.785786
+      ],
+      "speed_rad_s": 2.0835772121445495,
+      "force_nm": 0.65,
+      "mass_kg": 0.05,
+      "speed_positive_rad_s": 2.0835772121445495,
+      "speed_negative_rad_s": 2.2106412414993044
+    }
+  },
+  "scan_frames": {
+    "slew": [
+      -0.012,
+      0.108,
+      -0.03
+    ],
+    "boom": [
+      -0.004,
+      0.195,
+      0.006
+    ],
+    "stick": [
+      0.17,
+      0.395,
+      0.01
+    ],
+    "bucket": [
+      0.265,
+      0.283,
+      0.011
+    ],
+    "tip": [
+      0.23,
+      0.229,
+      0.011
+    ]
+  }
+}

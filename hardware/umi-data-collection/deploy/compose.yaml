@@ -1,0 +1,57 @@
+# UMI recording dashboard on the excavator's Pi. Deployed by deploy.sh into ~/umi-dashboard on the
+# Pi, next to the dashboard's state (access-token, imus.json, time-calibration.json, recordings/),
+# which is mounted at /data. deploy-on-pi.sh writes .env with the Pi user's uid/gid and the host's
+# video and i2c group ids.
+#   sudo docker compose up -d        # start (also starts at boot: restart unless-stopped)
+#   sudo docker compose logs -f      # logs
+#   sudo docker compose down         # stop and keep it stopped
+name: umi-dashboard
+services:
+  dashboard:
+    image: umi-dashboard:latest
+    container_name: umi-dashboard
+    restart: unless-stopped
+    init: true                       # reaps the capture helper; forwards SIGTERM to the recorder
+    stop_grace_period: 40s           # the recorder flushes and fsyncs an open take on SIGTERM
+    network_mode: host               # port ${UMI_PORT:-8000} on every interface (Wi-Fi, eth0, usb0)
+    uts: host                        # time-calibration.json is bound to the Pi's hostname
+    user: "${UMI_UID:-1000}:${UMI_GID:-1000}"
+    group_add:
+      - "${VIDEO_GID:-44}"
+      - "${I2C_GID:-994}"
+    # All of /dev, so a re-plugged USB camera and I2C buses created after boot (the arm
+    # IMUs on i2c-3 and i2c-5) appear without recreating the container. The cgroup rules only
+    # allow V4L2 (major 81) and I2C (major 89) character devices beyond Docker's defaults.
+    device_cgroup_rules:
+      - "c 81:* rmw"
+      - "c 89:* rmw"
+    command: ["--host", "0.0.0.0", "--port", "${UMI_PORT:-8000}", "--token-file", "/data/access-token"]
+    volumes:
+      - /dev:/dev
+      - .:/data
+      - /etc/localtime:/etc/localtime:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - >-
+          import pathlib, urllib.request;
+          token = pathlib.Path('/data/access-token').read_text().strip();
+          urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:${UMI_PORT:-8000}/api/status',
+          headers={'Cookie': 'umi_access=' + token}), timeout=3)
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"

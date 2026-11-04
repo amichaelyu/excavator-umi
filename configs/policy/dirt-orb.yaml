@@ -1,0 +1,48 @@
+# π0.5 baseline without CLOAK, the bucket out of view (released as policy/non-cloak-1000).
+# dirt-orb-cloak.yaml is the CLOAK variant and reuses this config's reconstructions, labels and cohort.
+name: dirt-orb
+task: dirt
+
+source:
+  recordings:
+    - data_root: dataset
+      label: dirt digging
+  visibility: Bucket1 handheld rig; the bucket and its mount are out of the camera view in every recording.
+  exclude: []
+
+reconstruct:
+  method: orbslam3_smoother
+  workers: 8
+  runner: local
+
+labels:
+  profile: full4_calibrated
+  planner: lookahead
+  contact_height: 0.05
+  pitch_clip: true
+
+cohort:
+  quality_policy: lenient
+
+train:
+  mode: baseline
+  action_representation: delta
+  steps: 1000
+  batch: 32
+  fsdp: 1
+  seed: 20261006
+  peak_lr: 5.0e-5
+  warmup: 25
+  save_interval: 250
+  keep_period: 250
+
+evaluate:
+  every: 250
+
+lambda:
+  gpus: [0]
+
+serve:
+  step: best
+  port: 8021
+  gpus: [0]

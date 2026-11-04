@@ -1,0 +1,51 @@
+# π0.5 + CLOAK, the robot masked with the digital twin's self-mask (released as policy/cloak-1000).
+# Writes to dirt-orb's reconstruction, labels and cohort directories, so those stages run once for both configs.
+name: dirt-orb-cloak
+task: dirt
+
+source:
+  recordings:
+    - data_root: dataset
+      label: dirt digging
+  visibility: Bucket1 handheld rig; the bucket and its mount are out of the camera view in every recording.
+  exclude: []
+
+reconstruct:
+  output: dataset/reconstructions/dirt-orb
+  method: orbslam3_smoother
+  workers: 8
+  runner: local
+
+labels:
+  output: dataset/labels/dirt-orb
+  profile: full4_calibrated
+  planner: lookahead
+  contact_height: 0.05
+  pitch_clip: true
+
+cohort:
+  output: dataset/cohorts/dirt-orb
+  quality_policy: lenient
+
+train:
+  mode: cloak
+  action_representation: delta
+  steps: 1000
+  batch: 32
+  fsdp: 1
+  seed: 20261006
+  peak_lr: 5.0e-5
+  warmup: 25
+  save_interval: 250
+  keep_period: 250
+
+evaluate:
+  every: 250
+
+lambda:
+  gpus: [0]
+
+serve:
+  step: best
+  port: 8020
+  gpus: [0]

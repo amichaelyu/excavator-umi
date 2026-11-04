@@ -1,0 +1,29 @@
+/* Shell layout only; colors, type and controls come from theme.css. Each view scopes its
+   own CSS under [data-view="<view>"]. */
+html, body { height: 100%; }
+body { display: flex; margin: 0; }
+
+#side { width: 232px; flex: none; display: flex; flex-direction: column; background: var(--surface); border-right: 1px solid var(--line); overflow-y: auto; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 16px; color: var(--ink); cursor: default; user-select: none; font: 700 18px/1 var(--font-display); }
+#nav h3 { margin: 16px 16px 4px; font: 600 12px/1.2 var(--font-body); color: var(--muted); }
+#nav a { display: flex; align-items: center; gap: 10px; padding: 7px 16px; color: var(--ink); text-decoration: none; border-left: 3px solid transparent; }
+#nav a:hover { background: var(--surface-2); }
+#nav a.active { background: var(--surface-2); border-left-color: var(--accent); font-weight: 600; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--line-strong); }
+.dot.running { background: var(--ok); }
+.dot.starting { background: var(--warn); }
+.dot.crashed { background: var(--danger); }
+
+body > main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#app { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+#views { flex: 1; min-height: 0; position: relative; }
+#views > .view { position: absolute; inset: 0; overflow: auto; background: var(--bg); }
+#views > .view[hidden] { display: none; }
+#a-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted); }
+#a-placeholder pre { max-width: min(960px, 90%); max-height: 50vh; overflow: auto; }
+
+@media (max-width: 720px) {
+  body { flex-direction: column; }
+  #side { width: auto; max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
+}

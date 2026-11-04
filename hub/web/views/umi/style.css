@@ -1,0 +1,16 @@
+/* UMI data collection view: hub-only additions around the Pi dashboard's own stylesheets
+   (hub/web/data-collection/*.css, loaded by view.js and already scoped to [data-view="umi"] [data-umi-page=...]). */
+[data-view="umi"] {
+  & > .umi-relay {
+    margin: var(--gap) 20px 0;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    background: var(--warn-soft);
+    color: var(--warn);
+    font-size: 13px;
+  }
+  & > .umi-relay[hidden] { display: none; }
+
+  /* The shell styles its own <main> with a bare `main` selector; give the Pi pages theirs back. */
+  & > [data-umi-page="dashboard"] main { display: block; }
+}

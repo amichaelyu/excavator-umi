@@ -1,0 +1,121 @@
+{
+  "name": "Double Eagle E568-003 / scan 2026-09-26",
+  "units": "metres, radians, seconds, kilograms",
+  "scan_scale": 1.0,
+  "scan_floor_y": 0.065,
+  "scan_origin": [
+    -0.012,
+    0.065,
+    -0.03
+  ],
+  "scan_pivots": {
+    "slew": [
+      -0.012,
+      0.108,
+      -0.03
+    ],
+    "boom": [
+      0.011,
+      0.151,
+      0.006
+    ],
+    "stick": [
+      0.167,
+      0.387,
+      0.01
+    ],
+    "bucket": [
+      0.278,
+      0.283,
+      0.011
+    ],
+    "tip": [
+      0.237,
+      0.234,
+      0.011
+    ]
+  },
+  "joints": {
+    "slew": {
+      "range_deg": [
+        -165,
+        165
+      ],
+      "speed_rad_s": 0.8,
+      "force_nm": 1.2,
+      "mass_kg": 0.55
+    },
+    "boom": {
+      "range_deg": [
+        -48,
+        30
+      ],
+      "speed_rad_s": 0.6,
+      "force_nm": 2.0,
+      "mass_kg": 0.12,
+      "speed_positive_rad_s": 0.52,
+      "speed_negative_rad_s": 0.68
+    },
+    "stick": {
+      "range_deg": [
+        -68,
+        58
+      ],
+      "speed_rad_s": 0.4,
+      "force_nm": 1.2,
+      "mass_kg": 0.08
+    },
+    "bucket": {
+      "range_deg": [
+        -40,
+        140
+      ],
+      "speed_rad_s": 1.2,
+      "force_nm": 0.65,
+      "mass_kg": 0.05
+    }
+  },
+  "scan_frames": {
+    "slew": [
+      -0.012,
+      0.108,
+      -0.03
+    ],
+    "boom": [
+      -0.004,
+      0.195,
+      0.006
+    ],
+    "stick": [
+      0.17,
+      0.395,
+      0.01
+    ],
+    "bucket": [
+      0.265,
+      0.283,
+      0.011
+    ],
+    "tip": [
+      0.23,
+      0.229,
+      0.011
+    ]
+  },
+  "camera_mount": {
+    "measured": false,
+    "camera_side": "right",
+    "camera_faces": "backwards_toward_cab",
+    "bucket_point_in_camera_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_quat_wxyz": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
+}
