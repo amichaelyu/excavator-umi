@@ -23,7 +23,7 @@ dependencies = [
     "imageio>=2.37,<3",
     "imageio-ffmpeg>=0.6,<0.7",
     # OpenPI client transport (inference runs on the Lambda server)
-    "msgpack==1.2.2",
+    "msgpack==1.2.3",
     "websockets==16.1.1",
     # ESP32 BLE bridge
     "bleak==3.0.2",
